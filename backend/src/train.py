@@ -9,10 +9,7 @@ from sklearn.metrics import accuracy_score, roc_auc_score, average_precision_sco
 import json
 from datetime import datetime
 
-# ============================================================
 # DATASET
-# ============================================================
-
 class PreExtractedFeaturesDataset(Dataset):
     """Dataset that loads pre-extracted features"""
     
@@ -38,11 +35,7 @@ class PreExtractedFeaturesDataset(Dataset):
     def __getitem__(self, idx):
         return self.features[idx], self.labels[idx]
 
-
-# ============================================================
 # MODEL
-# ============================================================
-
 class Classifier(nn.Module):
     """Simple classifier for pre-extracted features"""
     
@@ -63,10 +56,7 @@ class Classifier(nn.Module):
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
 
 
-# ============================================================
 # EVALUATION
-# ============================================================
-
 def evaluate(model, dataloader, criterion, device):
     """Evaluate model on validation/test set"""
     model.eval()
@@ -104,16 +94,14 @@ def evaluate(model, dataloader, criterion, device):
     
     return avg_loss, accuracy, auc, ap
 
-
-# ============================================================
 # TRAINING
-# ============================================================
-
 def train():
     # Configuration
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     batch_size = 256
-    num_epochs = 15
+    # model is really powerful so 1 epoch is enough to get good results and avoid overfitting
+    num_epochs = 1 
+
     learning_rate = 1e-4
     hidden_dim = 256
     dropout = 0.3
@@ -316,11 +304,7 @@ def train():
     
     return model, history
 
-
-# ============================================================
 # PLOTTING
-# ============================================================
-
 def plot_training_curves(history, num_epochs):
     """Plot and save training curves"""
     
@@ -369,11 +353,6 @@ def plot_training_curves(history, num_epochs):
     
     # Show plot
     plt.show()
-
-
-# ============================================================
-# ENTRY POINT
-# ============================================================
 
 def main():
     start_time = datetime.now()
